@@ -4,6 +4,7 @@ class TicTacToe {
 
 	//declaring a gobal tic tac toe board and variables
 	private static ArrayList<ArrayList<String> > board;
+	private static ArrayList<Integer> cornerPosition;
 	private static int whoseTurn = 0; // to monitor turns 1 --> player and 0 --> cpu
 	private static int playerFlag = 1; // to check if player won(1) toss or cpu(0)
 	private static String playerSymbol = "";
@@ -21,7 +22,7 @@ class TicTacToe {
 	public static void displayBoard() {
 		System.out.println(board.get(0).get(0)+ "|" +board.get(0).get(1)+ "|" +board.get(0).get(2));
 		System.out.println(board.get(1).get(0)+ "|" +board.get(1).get(1)+ "|" +board.get(1).get(2));
-		System.out.println(board.get(2).get(0)+ "|" +board.get(2).get(1)+ "|" +board.get(2).get(2));
+		System.out.println(board.get(2).get(0)+ "|" +board.get(2).get(1)+ "|" +board.get(2).get(2)+"\n");
 	}
 
 	//Method to choose who goes first
@@ -274,38 +275,41 @@ class TicTacToe {
 	public static void manageTurn() {
 		int valid = 0;
 		if (whoseTurn == 1){
+			System.out.println("Your turn : ");
 			while (valid != 1){
-				System.out.println("Your turn : ");
 				Scanner input = new Scanner(System.in);
-				System.out.print("Select a empty position: ");
+				System.out.print("Select an empty position: ");
 				int userPositionChoice = input.nextInt();
 				int row = (int) Math.floor((userPositionChoice-1)/3);
 				int col = (userPositionChoice-1)%3;
 				valid = checkValidPosition(userPositionChoice);
-				if (valid == 1){
+				if (valid == 1)
 					board.get(row).set(col, playerSymbol);
-				}
+				else 
+					System.out.println("Invalid Entry: Selected position is not empty.");
 				displayBoard();
 			}
 		}
 		else {
+			System.out.println("CPU turn : ");
 			while (valid != 1){
-				System.out.println("CPU turn : ");
 				int cpuPositionChoice;
 				int goForWin = chooseWinningPosition(whoseTurn);
 				int preventOpponentWin = chooseWinningPosition(1-whoseTurn);
+				int chooseCorner = cornerPosition.get((int) Math.floor(Math.random()*cornerPosition.size()));
 				if (goForWin != 0)
 					cpuPositionChoice = goForWin;
 				else if (preventOpponentWin != 0)
 					cpuPositionChoice = preventOpponentWin;
+				else if (chooseCorner != 0)
+					cpuPositionChoice = chooseCorner;
 				else
 					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
 				int col = (cpuPositionChoice-1)%3;
 				valid = checkValidPosition(cpuPositionChoice);
-				if (valid == 1){
+				if (valid == 1)
 					board.get(row).set(col, cpuSymbol);
-				}
 				displayBoard();
 			}
 		}
@@ -314,11 +318,17 @@ class TicTacToe {
 	//Main function
 	public static void main(String[] args) {
 		//initial run to set all variables
+		cornerPosition = new ArrayList<Integer>(Arrays.asList(1,3,7,9));
 		firstRun();
 		while (isGameIsGoing == 1) {
 			manageTurn();
 			checkGameIsGoing();
 			changePlayer();
 		}
+		changePlayer();
+		if (whoseTurn == 1)
+			System.out.println("Congrats!! You Won.");
+		else
+			System.out.println("Opps!! CPU Wins.");
 	}
 }
