@@ -4,11 +4,11 @@ class TicTacToe {
 
 	//declaring a gobal tic tac toe board and variables
 	private static ArrayList<ArrayList<String> > board;
-	private static ArrayList<Integer> cornerPosition;
-	private static ArrayList<Integer> sidePosition;
+	private static ArrayList<Integer> cornerPosition; // to store corner position
+	private static ArrayList<Integer> sidePosition; // // to store side position
 	private static int whoseTurn = 0; // to monitor turns 1 --> player and 0 --> cpu
 	private static int playerFlag = 1; // to check if player won(1) toss or cpu(0)
-	private static String playerSymbol = "";
+	private static String playerSymbol = ""; 
 	private static String cpuSymbol = "";
 	private static int isGameIsGoing = 1; // if 1 --> game is going and  0 --> end game
 
@@ -21,9 +21,11 @@ class TicTacToe {
 	}
 
 	public static void displayBoard() {
-		System.out.println(board.get(0).get(0)+ "|" +board.get(0).get(1)+ "|" +board.get(0).get(2));
-		System.out.println(board.get(1).get(0)+ "|" +board.get(1).get(1)+ "|" +board.get(1).get(2));
-		System.out.println(board.get(2).get(0)+ "|" +board.get(2).get(1)+ "|" +board.get(2).get(2)+"\n");
+		System.out.println(board.get(0).get(0)+ " | " +board.get(0).get(1)+ " | " +board.get(0).get(2));
+		System.out.println("----------");
+		System.out.println(board.get(1).get(0)+ " | " +board.get(1).get(1)+ " | " +board.get(1).get(2));
+		System.out.println("----------");
+		System.out.println(board.get(2).get(0)+ " | " +board.get(2).get(1)+ " | " +board.get(2).get(2)+"\n");
 	}
 
 	//Method to choose who goes first
@@ -298,6 +300,7 @@ class TicTacToe {
 				int goForWin = chooseWinningPosition(whoseTurn);
 				int preventOpponentWin = chooseWinningPosition(1-whoseTurn);
 				int chooseCorner = cornerPosition.get((int) Math.floor(Math.random()*10)%cornerPosition.size());
+				int chooseSide = sidePosition.get((int) Math.floor(Math.random()*10)%sidePosition.size());
 				int chooseCentre = 5;
 				if (goForWin != 0)
 					cpuPositionChoice = goForWin;
@@ -308,7 +311,7 @@ class TicTacToe {
 				else if (chooseCentre != 0)
 					cpuPositionChoice = chooseCentre;
 				else
-					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
+					cpuPositionChoice = chooseSide;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
 				int col = (cpuPositionChoice-1)%3;
 				valid = checkValidPosition(cpuPositionChoice);
@@ -323,6 +326,7 @@ class TicTacToe {
 	public static void main(String[] args) {
 		//initial run to set all variables
 		cornerPosition = new ArrayList<Integer>(Arrays.asList(1,3,7,9));
+		sidePosition = new ArrayList<Integer>(Arrays.asList(2,4,6,8));
 		firstRun();
 		while (isGameIsGoing == 1) {
 			manageTurn();
