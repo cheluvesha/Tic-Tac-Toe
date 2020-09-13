@@ -39,7 +39,7 @@ class TicTacToe {
 	}
 
 	//Secondary method to chooseSymbol method
-	public static void secChooseSymbol(int userSymbolChoice){
+	public static void secChooseSymbol(int userSymbolChoice) {
 		if (userSymbolChoice == 1) {
 				playerSymbol = "X";
 				cpuSymbol = "O";
@@ -80,7 +80,7 @@ class TicTacToe {
 	}
 
 	//Method to check row for win
-	public static int checkRow(){
+	public static int checkRow() {
 		int rowFlag = 0;
 		if (board.get(0).get(0) == board.get(0).get(1) && board.get(0).get(1) == board.get(0).get(2))
 			rowFlag = 1;
@@ -92,7 +92,7 @@ class TicTacToe {
 	}
 
 	//Method to check column for win
-	public static int checkCol(){
+	public static int checkCol() {
 		int colFlag = 0;
 		if (board.get(0).get(0) == board.get(1).get(0) && board.get(1).get(0) == board.get(2).get(0))
 			colFlag = 1;
@@ -104,7 +104,7 @@ class TicTacToe {
 	}
 
 	//Method to check diagonal for win
-	public static int checkDia(){
+	public static int checkDia() {
 		int diaFlag = 0;
 		if (board.get(0).get(0) == board.get(1).get(1) && board.get(1).get(1) == board.get(2).get(2))
 			diaFlag = 1;
@@ -114,7 +114,7 @@ class TicTacToe {
 	}
 
 	//Method to check win or not
-	public static int checkWin(){
+	public static int checkWin() {
 		if (checkRow() == 1 || checkCol() == 1 || checkDia() == 1)
 			return 1;
 		else
@@ -122,7 +122,7 @@ class TicTacToe {
 	}
 
 	//Method to check tie or not
-	public static int checkTie(){
+	public static int checkTie() {
 		int tieFlag = 0;
 		if (board.get(0).get(0) != "1" && board.get(0).get(1) != "2" && board.get(0).get(2) != "3") {
 			if (board.get(1).get(0) != "4" && board.get(1).get(1) != "5" && board.get(1).get(2) != "6") {
@@ -150,11 +150,123 @@ class TicTacToe {
 	}
 
 	//Method to to check valid position entered by user
-	public static int checkValidPosition(int row, int col) {
-		int pos = (row*3)+col;
-		String strPos = Integer.toString((pos+1));
-		if (board.get(row).get(col).equals(strPos))
+	public static int checkValidPosition(int positionValid) {
+		int rowPosition = (int) Math.floor((positionValid-1)/3);
+		int colPosition = (positionValid-1)%3;
+		String strPos = Integer.toString((positionValid));
+		if (board.get(rowPosition).get(colPosition).equals(strPos))
 			return 1;
+		else
+			return 0;
+	}
+
+	//find winnig position in row
+	private static int chooseInRow(String matchingSymbol) {
+		int minTwoFlag;
+		int position;
+		ArrayList<Integer> rowSum = new ArrayList<Integer>(Arrays.asList(6,15,24));
+		for (int row=0; row<3 ; row++) {
+			position = rowSum.get(row);
+			minTwoFlag = 2;
+			for (int col=0; col<3 ; col++ ) {
+				if (board.get(row).get(col).equals(matchingSymbol) && (minTwoFlag != 0)){
+					position -= (row*3)+(col+1);
+					--minTwoFlag;
+				}
+			}
+			if ((minTwoFlag == 0)) {
+				if (checkValidPosition(position) == 1)
+					return position;
+				else {
+					minTwoFlag = 2;
+					break;
+				}
+			}
+		}
+		return 0;
+	}
+
+	//find winning positon in column
+	private static int chooseInColumn(String matchingSymbol) {
+		int minTwoFlag;
+		int position;
+		ArrayList<Integer> columnSum = new ArrayList<Integer>(Arrays.asList(12,15,18));
+		for (int col=0; col<3 ; col++) {
+			minTwoFlag = 2;
+			position = columnSum.get(col);
+			for (int row=0; row < 3 ; row++ ) {
+				if (board.get(row).get(col).equals(matchingSymbol) && (minTwoFlag != 0)){
+					position -= (row*3)+(col+1);
+					--minTwoFlag;
+				}
+			}
+			if ((minTwoFlag == 0)) {
+				if (checkValidPosition(position) == 1)
+					return position;
+				else {
+					minTwoFlag = 2;
+					break;
+				}
+			}
+		}
+		return 0;
+	}
+
+	//find winning positon in diagonal_1
+	private static int chooseInDiagonal_1(String matchingSymbol) {
+		int diagonalSum = 15;
+		int minTwoFlag = 2;
+		int position = diagonalSum;
+		for (int row=0; row<3 ; row++) {
+			if (board.get(row).get(row).equals(matchingSymbol) && (minTwoFlag != 0)){
+				position -= (row*3)+(row+1);
+				--minTwoFlag;
+			}
+		}
+		if ((minTwoFlag == 0)) {
+			if (checkValidPosition(position) == 1)
+				return position;
+		}
+		return 0;
+	}
+
+	//find winning positon in diagonal_2
+	private static int chooseInDiagonal_2(String matchingSymbol) {
+		int col;
+		int diagonalSum = 15;
+		int minTwoFlag = 2;
+		int position = diagonalSum;
+		for (int row=0; row<3 ; row++) {
+			col = 2-row;
+			if (board.get(row).get(col).equals(matchingSymbol) && (minTwoFlag != 0)){
+				position -= (row*3)+(col+1);
+				--minTwoFlag;
+			}
+		}
+		if ((minTwoFlag == 0)) {
+			if (checkValidPosition(position) == 1)
+				return position;
+		}
+		return 0;
+	}
+
+	//Method to check winning position
+	public static int chooseWinningPosition(int turnMonitor){
+		String matchSymbol;
+
+		if (turnMonitor == 1)
+			matchSymbol = playerSymbol;
+		else
+			matchSymbol = cpuSymbol;
+		
+		if (chooseInRow(matchSymbol) != 0)
+			return chooseInRow(matchSymbol);
+		else if (chooseInColumn(matchSymbol) != 0)
+			return chooseInColumn(matchSymbol);
+		else if (chooseInDiagonal_1(matchSymbol) != 0)
+			return chooseInDiagonal_1(matchSymbol);
+		else if (chooseInDiagonal_2(matchSymbol) != 0)
+			return chooseInDiagonal_2(matchSymbol);
 		else
 			return 0;
 	}
@@ -170,7 +282,7 @@ class TicTacToe {
 				int userPositionChoice = input.nextInt();
 				int row = (int) Math.floor((userPositionChoice-1)/3);
 				int col = (userPositionChoice-1)%3;
-				valid = checkValidPosition(row, col);
+				valid = checkValidPosition(userPositionChoice);
 				if (valid == 1){
 					board.get(row).set(col, playerSymbol);
 				}
@@ -180,10 +292,15 @@ class TicTacToe {
 		else {
 			while (valid != 1){
 				System.out.println("CPU turn : ");
-				int cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
+				int cpuPositionChoice;
+				int goForWin = chooseWinningPosition(whoseTurn);
+				if (goForWin != 0)
+					cpuPositionChoice = goForWin;
+				else
+					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
 				int col = (cpuPositionChoice-1)%3;
-				valid = checkValidPosition(row, col);
+				valid = checkValidPosition(cpuPositionChoice);
 				if (valid == 1){
 					board.get(row).set(col, cpuSymbol);
 				}
