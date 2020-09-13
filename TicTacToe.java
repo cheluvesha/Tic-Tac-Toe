@@ -5,6 +5,7 @@ class TicTacToe {
 	//declaring a gobal tic tac toe board and variables
 	private static ArrayList<ArrayList<String> > board;
 	private static ArrayList<Integer> cornerPosition;
+	private static ArrayList<Integer> sidePosition;
 	private static int whoseTurn = 0; // to monitor turns 1 --> player and 0 --> cpu
 	private static int playerFlag = 1; // to check if player won(1) toss or cpu(0)
 	private static String playerSymbol = "";
@@ -296,13 +297,16 @@ class TicTacToe {
 				int cpuPositionChoice;
 				int goForWin = chooseWinningPosition(whoseTurn);
 				int preventOpponentWin = chooseWinningPosition(1-whoseTurn);
-				int chooseCorner = cornerPosition.get((int) Math.floor(Math.random()*cornerPosition.size()));
+				int chooseCorner = cornerPosition.get((int) Math.floor(Math.random()*10)%cornerPosition.size());
+				int chooseCentre = 5;
 				if (goForWin != 0)
 					cpuPositionChoice = goForWin;
 				else if (preventOpponentWin != 0)
 					cpuPositionChoice = preventOpponentWin;
 				else if (chooseCorner != 0)
 					cpuPositionChoice = chooseCorner;
+				else if (chooseCentre != 0)
+					cpuPositionChoice = chooseCentre;
 				else
 					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
@@ -310,8 +314,8 @@ class TicTacToe {
 				valid = checkValidPosition(cpuPositionChoice);
 				if (valid == 1)
 					board.get(row).set(col, cpuSymbol);
-				displayBoard();
 			}
+			displayBoard();
 		}
 	}	
 
@@ -325,6 +329,7 @@ class TicTacToe {
 			checkGameIsGoing();
 			changePlayer();
 		}
+		//Report winner
 		changePlayer();
 		if (whoseTurn == 1)
 			System.out.println("Congrats!! You Won.");
