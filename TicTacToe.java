@@ -253,7 +253,6 @@ class TicTacToe {
 	//Method to check winning position
 	public static int chooseWinningPosition(int turnMonitor){
 		String matchSymbol;
-
 		if (turnMonitor == 1)
 			matchSymbol = playerSymbol;
 		else
@@ -294,8 +293,11 @@ class TicTacToe {
 				System.out.println("CPU turn : ");
 				int cpuPositionChoice;
 				int goForWin = chooseWinningPosition(whoseTurn);
+				int preventOpponentWin = chooseWinningPosition(1-whoseTurn);
 				if (goForWin != 0)
 					cpuPositionChoice = goForWin;
+				else if (preventOpponentWin != 0)
+					cpuPositionChoice = preventOpponentWin;
 				else
 					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
