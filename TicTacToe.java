@@ -16,8 +16,7 @@ class TicTacToe {
 
 	//Method to choose who goes first
 	public static void chooseFirst(int yourChoice) {
-		Random random = new Random();
-		int randomChoice = random.nextInt(2);
+		int randomChoice = (int) Math.floor(Math.random()*10)%2+1;
 		if (randomChoice == yourChoice) {
 			whoseTurn =  randomChoice;
 			System.out.println("You won the toss.");
