@@ -139,7 +139,6 @@ class TicTacToe {
 		int tieFlag = checkTie();
 		if (winFlag == 1 || tieFlag == 1)
 			isGameIsGoing = 0;
-		System.out.println( winFlag +", "+ tieFlag);
 	}
 
 	//Method to change player
@@ -150,11 +149,57 @@ class TicTacToe {
 			whoseTurn = 0;
 	}
 
+	//Method to to check valid position entered by user
+	public static int checkValidPosition(int row, int col) {
+		int pos = (row*3)+col;
+		String strPos = Integer.toString((pos+1));
+		if (board.get(row).get(col).equals(strPos))
+			return 1;
+		else
+			return 0;
+	}
+
+	//Method to manage player turn
+	public static void manageTurn() {
+		int valid = 0;
+		if (whoseTurn == 1){
+			while (valid != 1){
+				System.out.println("Your turn : ");
+				Scanner input = new Scanner(System.in);
+				System.out.print("Select a empty position: ");
+				int userPositionChoice = input.nextInt();
+				int row = (int) Math.floor((userPositionChoice-1)/3);
+				int col = (userPositionChoice-1)%3;
+				valid = checkValidPosition(row, col);
+				if (valid == 1){
+					board.get(row).set(col, playerSymbol);
+				}
+				displayBoard();
+			}
+		}
+		else {
+			while (valid != 1){
+				System.out.println("CPU turn : ");
+				int cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
+				int row = (int) Math.floor((cpuPositionChoice-1)/3);
+				int col = (cpuPositionChoice-1)%3;
+				valid = checkValidPosition(row, col);
+				if (valid == 1){
+					board.get(row).set(col, cpuSymbol);
+				}
+				displayBoard();
+			}
+		}
+	}	
+
 	//Main function
 	public static void main(String[] args) {
 		//initial run to set all variables
 		firstRun();
-		checkGameIsGoing();
-		changePlayer();
+		while (isGameIsGoing == 1) {
+			manageTurn();
+			checkGameIsGoing();
+			changePlayer();
+		}
 	}
 }
