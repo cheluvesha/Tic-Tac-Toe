@@ -18,7 +18,10 @@ class TicTacToe {
 	public static void main(String[] args) {
 
 		initBoard();
-		System.out.println(board);
+		Iterator iter = board.iterator();
+		while(iter.hasNext()){
+			System.out.println(iter.next());
+		}
 
 	}
 }
