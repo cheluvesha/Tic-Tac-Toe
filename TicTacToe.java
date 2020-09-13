@@ -11,6 +11,7 @@ class TicTacToe {
 	private static String playerSymbol = ""; 
 	private static String cpuSymbol = "";
 	private static int isGameIsGoing = 1; // if 1 --> game is going and  0 --> end game
+	private static int tieFlag = 0; // if 1 --> game is tied
 
 	//Method to initialise board
 	public static void initBoard() {
@@ -96,7 +97,7 @@ class TicTacToe {
 	}
 
 	//Method to check column for win
-	public static int checkCol() {
+	public static int checkColumn() {
 		int colFlag = 0;
 		if (board.get(0).get(0) == board.get(1).get(0) && board.get(1).get(0) == board.get(2).get(0))
 			colFlag = 1;
@@ -108,7 +109,7 @@ class TicTacToe {
 	}
 
 	//Method to check diagonal for win
-	public static int checkDia() {
+	public static int checkDiagonal() {
 		int diaFlag = 0;
 		if (board.get(0).get(0) == board.get(1).get(1) && board.get(1).get(1) == board.get(2).get(2))
 			diaFlag = 1;
@@ -119,7 +120,7 @@ class TicTacToe {
 
 	//Method to check win or not
 	public static int checkWin() {
-		if (checkRow() == 1 || checkCol() == 1 || checkDia() == 1)
+		if (checkRow() == 1 || checkColumn() == 1 || checkDiagonal() == 1)
 			return 1;
 		else
 			return 0;
@@ -127,7 +128,6 @@ class TicTacToe {
 
 	//Method to check tie or not
 	public static int checkTie() {
-		int tieFlag = 0;
 		if (board.get(0).get(0) != "1" && board.get(0).get(1) != "2" && board.get(0).get(2) != "3") {
 			if (board.get(1).get(0) != "4" && board.get(1).get(1) != "5" && board.get(1).get(2) != "6") {
 				if (board.get(2).get(0) != "7" && board.get(2).get(1) != "8" && board.get(2).get(2) != "9")
@@ -333,11 +333,16 @@ class TicTacToe {
 			checkGameIsGoing();
 			changePlayer();
 		}
-		//Report winner
-		changePlayer();
-		if (whoseTurn == 1)
-			System.out.println("Congrats!! You Won.");
-		else
-			System.out.println("Opps!! CPU Wins.");
+
+		if (tieFlag == 1)
+			System.out.println("Woo!! It's a Draw.");
+		else {
+			//Report winner
+			changePlayer();
+			if (whoseTurn == 1)
+				System.out.println("Congrats!! You Won.");
+			else
+				System.out.println("Opps!! CPU Wins.");
+		}
 	}
 }
