@@ -254,10 +254,10 @@ class TicTacToe {
 	public static int chooseWinningPosition(int turnMonitor){
 		String matchSymbol;
 
-		if (turnMonitor == 1)
-			matchSymbol = playerSymbol;
-		else
+		if (turnMonitor == 2)
 			matchSymbol = cpuSymbol;
+		else
+			matchSymbol = playerSymbol;
 		
 		if (chooseInRow(matchSymbol) != 0)
 			return chooseInRow(matchSymbol);
@@ -278,7 +278,11 @@ class TicTacToe {
 			while (valid != 1){
 				System.out.println("Your turn : ");
 				Scanner input = new Scanner(System.in);
-				System.out.print("Select a empty position: ");
+				int goForWin = chooseWinningPosition(whoseTurn);
+				System.out.println("Select a empty position: ");
+				if(goForWin != 0) {
+					System.out.println("Select position: "+goForWin);
+				}
 				int userPositionChoice = input.nextInt();
 				int row = (int) Math.floor((userPositionChoice-1)/3);
 				int col = (userPositionChoice-1)%3;
@@ -293,11 +297,7 @@ class TicTacToe {
 			while (valid != 1){
 				System.out.println("CPU turn : ");
 				int cpuPositionChoice;
-				int goForWin = chooseWinningPosition(whoseTurn);
-				if (goForWin != 0)
-					cpuPositionChoice = goForWin;
-				else
-					cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
+				cpuPositionChoice = (int) Math.floor(Math.random()*10)%9+1;
 				int row = (int) Math.floor((cpuPositionChoice-1)/3);
 				int col = (cpuPositionChoice-1)%3;
 				valid = checkValidPosition(cpuPositionChoice);
